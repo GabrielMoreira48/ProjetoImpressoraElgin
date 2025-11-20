@@ -2,6 +2,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 
 import java.awt.*;
+import java.sql.SQLOutput;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.plaf.PanelUI;
@@ -160,13 +161,22 @@ public class Main {
     }
 
     public static void AvancaPapel() {
-        ImpressoraDLL.INSTANCE.AvancaPapel(2);
+        ImpressoraDLL.INSTANCE.AvancaPapel(3);
     }
 
     public static void ImpressaoQRCode() {
         if (conexaoAberta) {
 
-            int resultado = ImpressoraDLL.INSTANCE.ImpressaoQRCode("Teste", 6, 4);
+            System.out.println("Insira oque deseja no QRCode");
+            String dados = scanner.nextLine();
+
+            System.out.println("Escolha o tamanho do QRCode: ");
+            int tamanho = scanner.nextInt();
+
+            System.out.println("Escolha o nivel de correção: ");
+            int nivelCorrecao = scanner.nextInt();
+
+            int resultado = ImpressoraDLL.INSTANCE.ImpressaoQRCode(dados, tamanho, nivelCorrecao);
 
             if (resultado == 0) {
                 System.out.printf("Impressão realizada com sucesso");
@@ -182,7 +192,19 @@ public class Main {
 
     public static void ImpressaoCodigodeBarras() {
         if (conexaoAberta) {
-            int resultado = ImpressoraDLL.INSTANCE.ImpressaoCodigoBarras(8, "{A012345678912", 100, 2, 3);
+            System.out.printf("Insira os dados a ser impressos (Regras: 1º = {, 2º = A, B ou C):  ");
+            String dados = scanner.nextLine();
+
+            System.out.println("Insira a altura do codigo(Max 255): ");
+            int altura = scanner.nextInt();
+
+            System.out.printf("Defina a largura do codigo(Max 6): ");
+            int largura = scanner.nextInt();
+
+            System.out.printf("Defina o HRI (1 - Acima do código, 2 - Abaixo do código, 3 - Ambos, 4 - Não impresso): ");
+            int HRI = scanner.nextInt();
+
+            int resultado = ImpressoraDLL.INSTANCE.ImpressaoCodigoBarras(8, dados, altura, largura, HRI);
 
             if (resultado == 0) {
                 System.out.printf("Codigo de barras immpresso com sucesso!");
@@ -201,8 +223,9 @@ public class Main {
 
     public static void ImprimeXMLSAT() {
         if (conexaoAberta) {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser("C:\\Users\\gabri\\OneDrive\\Documentos\\FACULDADE\\Java-Aluno Graduacao\\ProjetoImpressoraElgin");
             chooser.setDialogTitle("Selecione o arquivo a ser impresso");
+
             int retorno = chooser.showOpenDialog(null);
 
             if (retorno == JFileChooser.APPROVE_OPTION) {
@@ -214,26 +237,26 @@ public class Main {
                     int resultado = ImpressoraDLL.INSTANCE.ImprimeXMLSAT(xmlconteudo, 0);
 
                     if (resultado == 0) {
-                        System.out.println("Aqrivo impresso com sucesso!");
+                        System.out.println("Arquivo impresso com sucesso!");
                     } else {
-                        System.out.printf("Erro ao imprimir o arquivo! Erro: " + resultado);
+                        System.out.println("Erro ao imprimir o arquivo! Erro: " + resultado);
                     }
                 } catch (IOException e) {
-                    System.out.printf("Erro ao ler o arquivo: " + e.getMessage());
+                    System.out.println("Erro ao ler o arquivo: " + e.getMessage());
                 }
             } else {
-                System.out.printf("Arquivo não selecionado!");
+                System.out.println("Arquivo não selecionado!");
             }
         } else {
             System.out.println("Conexão não iniciada!");
-            return;
         }
     }
+
 
     public static void ImprimeXMLCancelamentoSAT() {
         if (conexaoAberta) {
 
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser("C:\\Users\\gabri\\OneDrive\\Documentos\\FACULDADE\\Java-Aluno Graduacao\\ProjetoImpressoraElgin");
             chooser.setDialogTitle("Selecione o arqivo ser impresso");
             int retorno = chooser.showOpenDialog(null);
 
@@ -283,6 +306,7 @@ public class Main {
 
     public static void AbreGaveta() {
         if (conexaoAberta) {
+
             int resultado = ImpressoraDLL.INSTANCE.AbreGaveta(1, 5, 10);
 
             if (resultado == 0) {
@@ -351,7 +375,6 @@ public class Main {
 
                 case "4":
                     ImpressaoQRCode();
-                    //ImpressoraDLL.INSTANCE.ImpressaoQRCode("Teste", 6, 4);
                     AvancaPapel();
                     corte();
                     break;
