@@ -1,106 +1,138 @@
-# Projeto Impressora Elgin – Integração Java
+Projeto Impressora Elgin – Integração Java
+📝 Descrição
 
-Este projeto demonstra como realizar a comunicação com impressoras Elgin utilizando Java e a biblioteca JNA (Java Native Access).  
-O objetivo é exemplificar funções como abertura de conexão, impressão de texto, QRCode, sinal sonoro, abertura de gaveta e finalização da conexão.
+Este projeto é um sistema de atendimento de caixa (PDV simplificado) desenvolvido em Java, que simula a comunicação com impressoras de cupom fiscal da Elgin.
+O sistema permite realizar operações de impressão de texto, QR Code, código de barras, avanço e corte de papel, abertura de gaveta, sinal sonoro e impressão de XML SAT/cancelamento.
 
----
+O objetivo do projeto é integrar lógica de programação (condicionais, laços de repetição e funções) com um cenário prático de automação comercial.
 
-## 📌 Tecnologias utilizadas
-- Java 17+
-- JNA 5.15.0
-- Biblioteca Elgin DLL (E1\_Impressora.dll)
-- IntelliJ IDEA Community
-- Git + GitHub
+💻 Funcionalidades
 
----
+O sistema permite ao usuário:
 
-## 🚀 Funcionalidades implementadas
-### ✔ Abertura de Conexão USB  
-Permite iniciar comunicação com a impressora via porta USB.
+Configurar conexão com a impressora (USB, RS232, TCP/IP, Bluetooth).
 
-### ✔ Impressão de Texto  
-Exemplo simples utilizando funções nativas disponibilizadas pela DLL.
+Abrir e fechar a conexão com a impressora.
 
-### ✔ Impressão de QR Code  
-Geração e envio de QR Code diretamente para a impressora.
+Imprimir texto no cupom fiscal com alinhamento, estilo e tamanho configuráveis.
 
-### ✔ Sinal Sonoro  
-Função para emitir bipes através da impressora.
+Imprimir QR Code com dados, tamanho e nível de correção escolhidos pelo usuário.
 
-### ✔ Abertura de Gaveta  
-Comando que envia pulso elétrico para abrir gaveta de dinheiro compatível.
+Imprimir código de barras com dados, altura, largura e HRI configuráveis.
 
-### ✔ Encerramento de Conexão  
-Finaliza a comunicação com a impressora de forma segura.
+Avançar papel.
 
----
+Realizar corte do papel.
 
-## 🧩 Exemplo de Função: Sinal Sonoro
+Abrir gaveta de dinheiro (Elgin ou padrão).
 
-```java
-public static void SinalSonoro() {
-    if (conexaoAberta) {
-        int resultado = ImpressoraDLL.INSTANCE.SinalSonoro(4, 5, 5);
+Emitir sinal sonoro.
 
-        if (resultado == 0) {
-            System.out.println("Sinal emitido com sucesso");
-        } else {
-            System.out.println("Erro ao emitir o sinal! Erro: " + resultado);
-        }
+Imprimir XML SAT ou XML de cancelamento, escolhendo o arquivo via interface gráfica (JFileChooser).
 
-    } else {
-        System.out.println("Conexão não iniciada!");
-        return;
-    }
-}
-```
+📋 Menu Interativo
 
----
+Ao executar o programa, o usuário verá o seguinte menu:
 
-## 📁 Estrutura do Projeto
+1  - Configurar Conexao
+2  - Abrir Conexao
+3  - Impressao Texto
+4  - Impressao QRCode
+5  - Impressao Cod Barras
+6  - Impressao XML SAT
+7  - Impressao XML Canc SAT
+8  - Abrir Gaveta Elgin
+9  - Abrir Gaveta
+10 - Sinal Sonoro
+0  - Fechar Conexao e Sair
 
-```
+
+O programa permanece em execução até que o usuário escolha a opção 0.
+
+⚙️ Tecnologias e Bibliotecas
+
+Java 17
+
+JNA (Java Native Access) – Para integração com a DLL da impressora.
+
+DLL oficial da impressora Elgin E1_Impressora01.dll
+
+Swing (JFileChooser) para seleção de arquivos XML.
+
+🛠️ Requisitos
+
+Java 17 instalado.
+
+Adicionar biblioteca JNA ao projeto.
+
+Ter a DLL da impressora localizada no caminho correto:
+C:\Users\gabri\OneDrive\Documentos\FACULDADE\Java-Aluno Graduacao\untitled\E1_Impressora01.dll
+
+Impressora conectada (USB, RS232, TCP/IP ou Bluetooth) e ligada.
+
+Para impressão de XML SAT ou cancelamento, arquivos XML devem estar disponíveis na máquina.
+
+🚀 Como executar
+
+Clone o projeto:
+
+git clone https://github.com/GabrielMoreira48/ProjetoImpressoraElgin.git
+
+
+Abra o projeto em uma IDE Java (IntelliJ, Eclipse ou VS Code).
+
+Certifique-se de adicionar a DLL da impressora no caminho correto.
+
+Execute a classe Main.java.
+
+Siga o menu interativo para testar todas as funcionalidades.
+
+🖼️ Exemplo de Uso
+
+Escolha a opção 3 - Impressao Texto → digite alinhamento, estilo, tamanho e o texto.
+
+Escolha a opção 4 - Impressao QRCode → digite os dados, tamanho e nível de correção.
+
+Escolha a opção 6 - Impressao XML SAT → selecione o arquivo XML na janela de seleção.
+
+📚 Funções da Biblioteca Elgin Utilizadas
+
+AbreConexaoImpressora()
+
+FechaConexaoImpressora()
+
+ImpressaoTexto()
+
+Corte()
+
+ImpressaoQRCode()
+
+ImpressaoCodigoBarras()
+
+AvancaPapel()
+
+AbreGavetaElgin()
+
+AbreGaveta()
+
+SinalSonoro()
+
+ImprimeXMLSAT()
+
+ImprimeXMLCancelamentoSAT()
+
+✅ Observações
+
+O sistema valida se a conexão com a impressora está aberta antes de executar qualquer operação de impressão.
+
+XML SAT/cancelamento é selecionado via interface gráfica (JFileChooser), facilitando o uso pelo usuário.
+
+Todas as funções são encapsuladas em métodos próprios, garantindo modularidade e organização do código.
+
+📂 Estrutura do Projeto
 ProjetoImpressoraElgin/
- ├─ libs/
- │   └─ jna-5.15.0.jar
- ├─ src/
- │   └─ main/java/
- │       └─ Impressora/
- │            ├─ Main.java
- │            └─ ImpressoraDLL.java
- ├─ README.md
- └─ build.gradle
-```
-
----
-
-## 🔧 Como executar
-1. Instale o Java 17+
-2. Adicione o JNA ao projeto
-3. Coloque a DLL na pasta correta
-4. Execute pelo IntelliJ (botão run)
-5. Certifique-se de que a impressora está conectada ao USB
-
----
-
-## 👤 Autores
-
-**Carlos Gabriel Moreira**  
-GitHub: github.com/GabrielMoreira48  
-
-**Gabriel **
-
-GitHub
-
-**Guilherme Nogueira**	
-GitHub
-
-**Kauan Medeiros**
-GitHub:  github.com/Hyazaka
-
-**Murilo Rodrigues**
-GitHub: github.com/batatalouca821k-blip
-
-Projeto desenvolvido para fins acadêmicos e prática de integração com dispositivos externos.
-
-
+├─ src/
+│  ├─ Main.java
+├─ lib/
+│  ├─ E1_Impressora01.dll
+├─ README.md
